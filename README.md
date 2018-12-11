@@ -1,1 +1,1 @@
-This repository demonstrates a basic template for a bazel project and includes CircleCI and Buildkite configurations.
+This repository demonstrates the rules_homebrew bazel rules for installing homebrew packages in a bazel workspace.
