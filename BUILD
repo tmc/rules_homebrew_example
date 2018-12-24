@@ -1,18 +1,22 @@
-
 sh_test(
     name = "cowsay_test",
     size = "small",
     srcs = ["cowsay_test.sh"],
     data = [
-        # TODO(tmc): figure out how to remove these dependencies
+        #TODO(tmc): eliminate these deps
+        "@homebrew//:binaries",
         "@homebrew_core//:allfiles",
-        "@brew//:binaries",
-        "@brew_packages//:cowsay",
+
+        "@my_packages//cowsay",
     ],
+    args = ["$(location @my_packages//cowsay)"],
 )
 sh_test(
     name = "cowthink_test",
     size = "small",
     srcs = ["cowthink_test.sh"],
-    data = ["@brew_packages//:cowthink"],
+    data = [
+        "@my_packages//cowsay:cowthink",
+    ],
+    args = ["$(location @my_packages//cowsay:cowthink)"],
 )
