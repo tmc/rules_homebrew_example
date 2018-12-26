@@ -29,8 +29,8 @@ deps-linux: deps-common
 
 .PHONY: deps-bazel
 ifeq "$(BAZEL)" ""
-# default to bazel20
-deps-bazel: deps-bazel20
+# default to bazel21
+deps-bazel: deps-bazel21
 else
 deps-bazel:
 	@echo '[deps-bazel] Bazel already present.'
@@ -56,7 +56,7 @@ linux-ci-from-host: linux-ci-image
 	docker run \
 		-v $(shell pwd):/app \
 		-e CACHEDIR=.cache-linux \
-		-ti ${IMAGE} make
+		-ti ${IMAGE} make deps ci
 
 .PHONY: linux-ci-from-host-shell
 linux-ci-from-host-shell: linux-ci-image
@@ -73,32 +73,25 @@ mac-ci-from-host:
 # requires https://circleci.com/docs/2.0/local-cli
 .PHONY: circle-ci-from-host
 circle-ci-from-host:
-	bk run local
+	circleci local execute --job build-and-test
 
-.PHONY: deps-bazel20
-deps-bazel20: ${CACHEDIR}/bazel-installer-20.sh
+# tests with upcoming backwards-compatible changes enabled (https://docs.bazel.build/versions/master/skylark/backward-compatibility.html)
+.PHONY: test-upcoming-bazel-changes
+test-upcoming-bazel-changes:
+	bazel build //... --all_incompatible_changes
+	bazel test //... --all_incompatible_changes
+
+.PHONY: deps-bazel21
+deps-bazel21: ${CACHEDIR}/bazel-installer-21.sh
 	$^ --user
 
-.PHONY: deps-bazel19
-deps-bazel19: ${CACHEDIR}/bazel-installer-19.sh
-	$^ --user
-
-${CACHEDIR}/bazel-installer-20.sh:
+${CACHEDIR}/bazel-installer-21.sh:
 ifeq ($(UNAME),Darwin)
-	curl -L -o $@ https://github.com/bazelbuild/bazel/releases/download/0.20.0/bazel-0.20.0-installer-darwin-x86_64.sh
+	curl -L -o $@ https://github.com/bazelbuild/bazel/releases/download/0.21.0/bazel-0.21.0-installer-darwin-x86_64.sh
 	chmod +x $@
 endif
 ifeq ($(UNAME),Linux)
-	curl -L -o $@ https://github.com/bazelbuild/bazel/releases/download/0.20.0/bazel-0.20.0-installer-linux-x86_64.sh
+	curl -L -o $@ https://github.com/bazelbuild/bazel/releases/download/0.21.0/bazel-0.21.0-installer-linux-x86_64.sh
 	chmod +x $@
 endif
 
-${CACHEDIR}/bazel-installer-19.sh:
-ifeq ($(UNAME),Darwin)
-	curl -L -o $@ https://github.com/bazelbuild/bazel/releases/download/0.19.0/bazel-0.19.0-installer-darwin-x86_64.sh
-	chmod +x $@
-endif
-ifeq ($(UNAME),Linux)
-	curl -L -o $@ https://github.com/bazelbuild/bazel/releases/download/0.19.0/bazel-0.19.0-installer-linux-x86_64.sh
-	chmod +x $@
-endif
