@@ -4,9 +4,6 @@ sh_test(
     srcs = ["cowsay_test.sh"],
     data = [
         #TODO(tmc): eliminate these deps
-        "@homebrew//:binaries",
-        "@homebrew_core//:allfiles",
-
         "@my_packages//cowsay",
     ],
     args = ["$(location @my_packages//cowsay)"],
