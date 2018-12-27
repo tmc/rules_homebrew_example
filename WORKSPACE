@@ -14,10 +14,9 @@ homebrew_register_toolchains()
 load("@com_github_tmc_rules_homebrew//rules:brew_packages.bzl", "brew_packages")
 brew_packages(
     name = "my_packages",
-    formulas = [
-        "cowsay",
-        "cloc",
-        "jq",
-    ],
+    packages = {
+        "cowsay": ["cowsay","cowthink"],
+        "jq": ["jq"],
+    },
 )
 
