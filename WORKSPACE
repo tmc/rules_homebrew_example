@@ -6,15 +6,15 @@ git_repository(
 )
 #local_repository( name = "com_github_tmc_rules_homebrew", path = "../rules_homebrew")
 
-load("@com_github_tmc_rules_homebrew//rules:def.bzl", "homebrew_rules_dependencies", "homebrew_register_toolchains", "brew_packages")
-homebrew_rules_dependencies()
-homebrew_register_toolchains()
+load("@com_github_tmc_rules_homebrew//rules:def.bzl", "homebrew_repository")
 
-brew_packages(
+homebrew_repository(
     name = "my_packages",
-    packages = {
-        "cowsay": ["cowsay","cowthink"],
-        "jq": ["jq"],
-    },
+    packages = [
+        "cowsay",
+        "jq",
+        "cloc",
+    ],
+    #verbose = True,
 )
 
