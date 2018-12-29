@@ -24,8 +24,7 @@ deps-darwin: deps-common
 
 .PHONY: deps-linux
 deps-linux: deps-common
-	apt-get install -y build-essential curl unzip
-
+	sudo apt-get install -y build-essential curl unzip git
 
 .PHONY: deps-bazel
 ifeq "$(BAZEL)" ""
@@ -55,6 +54,8 @@ linux-ci-image: dockerfiles/Dockerfile
 linux-ci-from-host: linux-ci-image
 	docker run \
 		-v $(shell pwd):/app \
+		-v $(shell pwd)/../rules_homebrew:/rules_homebrew \
+		-v $(HOME)/.cache/bazel:/home/user/.cache/bazel \
 		-e CACHEDIR=.cache-linux \
 		-ti ${IMAGE} make deps ci
 
@@ -62,6 +63,8 @@ linux-ci-from-host: linux-ci-image
 linux-ci-from-host-shell: linux-ci-image
 	docker run \
 		-v $(shell pwd):/app \
+		-v $(shell pwd)/../rules_homebrew:/rules_homebrew \
+		-v $(HOME)/.cache/bazel:/home/user/.cache/bazel \
 		-e CACHEDIR=.cache-linux \
 		-ti ${IMAGE} bash
 
