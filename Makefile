@@ -55,7 +55,6 @@ linux-ci-from-host: linux-ci-image
 	docker run \
 		-v $(shell pwd):/app \
 		-v $(shell pwd)/../rules_homebrew:/rules_homebrew \
-		-v $(HOME)/.cache/bazel:/home/user/.cache/bazel \
 		-e CACHEDIR=.cache-linux \
 		-ti ${IMAGE} make deps ci
 
@@ -64,7 +63,6 @@ linux-ci-from-host-shell: linux-ci-image
 	docker run \
 		-v $(shell pwd):/app \
 		-v $(shell pwd)/../rules_homebrew:/rules_homebrew \
-		-v $(HOME)/.cache/bazel:/home/user/.cache/bazel \
 		-e CACHEDIR=.cache-linux \
 		-ti ${IMAGE} bash
 
